@@ -1,0 +1,58 @@
+// attendance-controller.ts
+
+import { AttendanceInterface } from "../interface/attedance-interface";
+import {
+  clockInRest,
+  clockOutRest,
+  getAttendanceLogsRest,
+} from "../services/attedance-service";
+import { handleZodError } from "../utils/fetch";
+import {
+  AttendanceResponse,
+  ClockInRequestSchema,
+  ClockOutRequestSchema,
+  GetAttendanceLogsRequest,
+  GetAttendanceLogsResponse,
+  GetAttendanceLogsRequestSchema,
+} from "../validations/attedance-validation";
+
+export class RestAttendanceController implements AttendanceInterface {
+  async clockIn(
+    token: string
+  ): Promise<APIResponse<AttendanceResponse | null>> {
+    const parsed = ClockInRequestSchema.safeParse({});
+    if (!parsed.success) {
+      return handleZodError<AttendanceResponse>(parsed.error);
+    }
+
+    return clockInRest(token);
+  }
+
+  async clockOut(
+    token: string
+  ): Promise<APIResponse<AttendanceResponse | null>> {
+    const parsed = ClockOutRequestSchema.safeParse({});
+    if (!parsed.success) {
+      return handleZodError<AttendanceResponse>(parsed.error);
+    }
+
+    return clockOutRest(token);
+  }
+
+  async getAttendanceLogs(
+    data: GetAttendanceLogsRequest,
+    token: string
+  ): Promise<APIResponse<GetAttendanceLogsResponse | null>> {
+    const parsed = GetAttendanceLogsRequestSchema.safeParse(data);
+    if (!parsed.success) {
+      return handleZodError<GetAttendanceLogsResponse>(parsed.error);
+    }
+
+    return getAttendanceLogsRest(parsed, token);
+  }
+}
+
+export function newAttendanceController(): AttendanceInterface {
+  // if (process.env.MODE === "supabase") return new SupabaseAttendanceController();
+  return new RestAttendanceController();
+}
