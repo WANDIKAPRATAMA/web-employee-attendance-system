@@ -1,3 +1,3 @@
-import { SignInForm } from "@/components/views/auth/signin-form";
+import { SignInForm } from "@/components/views/clients/auth/signin-form";
 
 export default SignInForm;

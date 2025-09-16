@@ -1,9 +1,12 @@
+import { DataTable } from "@/components/views/common/table";
 import { auth } from "../../../../auth";
+import { createUser } from "@/components/views/common/table/data";
+import { User } from "lucide-react";
 
-export default async function UserAvatar() {
-  const session = await auth();
-
-  if (!session?.user) return null;
-
-  return <div>{JSON.stringify(session.user, null, 2)}</div>;
+export default function Home() {
+  return (
+    <div className="w-full h-full flex flex-col justify-center items-start p-10 gap-4">
+      <DataTable />
+    </div>
+  );
 }
