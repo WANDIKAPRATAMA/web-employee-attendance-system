@@ -1,5 +1,5 @@
 const NEXT_PUBLIC_APP_URL = "http://localhost:3000";
-const NEXT_PUBLIC_API_URL = "http://127.0.0.1:8080/api";
+const NEXT_PUBLIC_API_URL = "http://127.0.0.1:8080/api/v1";
 
 const AUTH_SECRET = "420b7a99ab9ab44b1bf27564aca86246";
 
