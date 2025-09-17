@@ -1,4 +1,4 @@
-import { Camera, LayoutDashboard } from "lucide-react";
+import { Building, Camera, LayoutDashboard, User2 } from "lucide-react";
 
 export const SIDEBAR_DATA = {
   user: {
@@ -32,5 +32,16 @@ export const SIDEBAR_DATA = {
     },
   ],
   navSecondary: [],
-  documents: [],
+  documentsAdmin: [
+    {
+      name: "Departments",
+      url: "/dashboard/departments",
+      icon: <Building />,
+    },
+    {
+      name: "Users",
+      url: "/dashboard/users",
+      icon: <User2 />,
+    },
+  ],
 };

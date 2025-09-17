@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { DepartmentResponse } from "./department-validation";
+import { ApplicationRole } from "./auth-validation";
 
 export const ListUsersRequestSchema = z.object({
   email: z.email().optional(),
@@ -38,10 +39,7 @@ export type UserResponse = {
   application_role?: Record<string, any>;
 };
 
-export type ListUsersResponse = {
-  users: UserResponse[];
-  pagination: Pagination;
-};
+export type ListUsersResponse = UserResponse[];
 
 export const UpdateProfileRequestSchema = z.object({
   full_name: z.string().min(2).max(255).optional(),
@@ -65,4 +63,5 @@ export type ProfileResponse = {
   address: string;
   department_id?: string;
   department?: DepartmentResponse;
+  application_role?: ApplicationRole;
 };

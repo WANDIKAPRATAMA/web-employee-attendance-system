@@ -74,7 +74,7 @@ export function SignUpForm({ className }: { className?: string }) {
               description: "Account created successfully!",
               action: {
                 label: "Go to Signin",
-                onClick: () => router.push("/signin"),
+                onClick: () => router.push("/auth/signin"),
               },
             });
           }

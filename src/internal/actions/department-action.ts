@@ -1,5 +1,4 @@
-// department-action.ts
-
+"use server";
 import { newDepartmentController } from "../controllers/department-controller";
 import {
   CreateDepartmentRequest,

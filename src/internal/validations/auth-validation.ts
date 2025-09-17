@@ -69,6 +69,7 @@ export type RefreshTokenResponse = {
 
 export const ChangeRoleRequestSchema = z.object({
   role: z.enum(["employee", "admin"]),
+  user_id: z.uuid(),
 });
 
 export type ChangeRoleRequest = z.infer<typeof ChangeRoleRequestSchema>;

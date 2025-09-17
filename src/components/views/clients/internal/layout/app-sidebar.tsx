@@ -23,7 +23,7 @@ export async function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const session = await auth();
-
+  const isAdmin = session?.user.role === "admin";
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -44,7 +44,7 @@ export async function AppSidebar({
       <SidebarContent>
         <ScrollArea className="flex-1 pr-4">
           <NavMain items={SIDEBAR_DATA.navMain} />
-          <NavDocuments items={SIDEBAR_DATA.documents} />
+          {isAdmin && <NavDocuments items={SIDEBAR_DATA.documentsAdmin} />}
           <NavSecondary items={SIDEBAR_DATA.navSecondary} className="mt-auto" />
         </ScrollArea>
       </SidebarContent>
