@@ -8,15 +8,15 @@ const restrictedPaths = ["/dashboard/internal"];
 
 // Middleware function
 export default auth((req: NextAuthRequest) => {
-  console.log("🚀 ~ req:", req);
+  // console.log("🚀 ~ req:", req);
   // Access session data from req.auth
   const session = req.auth;
   const isAuthenticated = !!session?.user;
   const url = req.nextUrl;
   const { pathname } = url;
 
-  console.log("🚀 ~ middleware ~ isAuthenticated:", isAuthenticated);
-  console.log("🚀 ~ middleware ~ pathname:", pathname);
+  // console.log("🚀 ~ middleware ~ isAuthenticated:", isAuthenticated);
+  // console.log("🚀 ~ middleware ~ pathname:", pathname);
 
   // Redirect authenticated users away from signin/signup pages
   if (

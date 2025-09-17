@@ -18,7 +18,7 @@ export default function Page() {
 
 async function Suspended() {
   const session = await auth();
-
+  console.log("session?.user.role", session?.user.role);
   if (!session?.accessToken) {
     return (
       <ErrorComponent
@@ -35,7 +35,6 @@ async function Suspended() {
   if (status !== "success") {
     return <ErrorComponent title="Error" error="Failed to fetch profile" />;
   }
-  console.log("🚀 ~ Suspended ~ profile:", profile);
 
   return (
     <ProfileForm

@@ -35,8 +35,8 @@ const authConfig: NextAuthConfig = {
               },
               credentials.deviceId as string
             );
-            console.log("🚀 ~ authorize ~ response:", response);
             const data = response?.payload.data; // Assuming this is SigninResponse
+            console.log("🚀 ~ authorize ~ data:", data?.user);
 
             if (response.status !== "success" || !data) {
               throw new Error(
@@ -51,7 +51,7 @@ const authConfig: NextAuthConfig = {
               id: data.user.id,
               email: data.user.full_name,
               name: data.user.full_name, // Use Email as name, since full_name isn't in UserResponse
-              role: "admin", // From JWT payload in logs; adjust if dynamic
+              role: data.user.application_role?.role ?? "employee", // From JWT payload in logs; adjust if dynamic
               accessToken: data.access_token,
               refreshToken: data.refresh_token,
               accessTokenExpires: Date.now() + 3600000, // 1 hour
@@ -92,8 +92,8 @@ const authConfig: NextAuthConfig = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      console.log("🚀 ~ jwt ~ user:", user);
-      console.log("🚀 ~ jwt ~ token:", token);
+      // console.log("🚀 ~ jwt ~ user:", user);
+      // console.log("🚀 ~ jwt ~ token:", token);
 
       if (user) {
         token.id = user.id;

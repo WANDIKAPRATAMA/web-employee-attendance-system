@@ -46,10 +46,7 @@ export type Pagination = {
   next_page: number | null;
 };
 
-export type GetDepartmentsResponse = {
-  departments: DepartmentResponse[];
-  pagination: Pagination;
-};
+export type GetDepartmentsResponse = DepartmentResponse[];
 
 export const AssignmentDepartmentRequestSchema = z.object({
   department_id: z.string().uuid(),

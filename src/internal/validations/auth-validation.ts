@@ -1,6 +1,7 @@
 // auth-validation.ts
 
 import { z } from "zod";
+import { DepartmentResponse } from "./department-validation";
 
 export const SignupRequestSchema = z.object({
   email: z.email(),
@@ -20,7 +21,13 @@ export const SigninRequestSchema = z.object({
 });
 
 export type SigninRequest = z.infer<typeof SigninRequestSchema>;
-
+export type ApplicationRole = {
+  id: string; // UUID
+  source_user_id: string; // UUID
+  role: "admin" | "employee";
+  created_at: string; // ISO timestamp
+  updated_at: string; // ISO timestamp
+};
 export type User = {
   id: string;
   source_user_id: string;
@@ -32,8 +39,8 @@ export type User = {
   address: string;
   created_at: string;
   updated_at: string;
-  department?: Record<string, any>;
-  application_role?: Record<string, any>;
+  department?: DepartmentResponse;
+  application_role?: ApplicationRole;
 };
 
 export type SigninResponse = {

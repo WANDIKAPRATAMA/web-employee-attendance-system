@@ -35,21 +35,19 @@ export async function changePasswordAction(
   const repo = newAuthController();
   return repo.changePassword(data, token);
 }
-
-export async function refreshTokenAction(
-  data: RefreshTokenRequest,
-  deviceId: string
-): Promise<APIResponse<RefreshTokenResponse | null>> {
-  const repo = newAuthController();
-  return repo.refreshToken(data, deviceId);
-}
-
 export async function changeRoleAction(
   data: ChangeRoleRequest,
   token: string
 ): Promise<APIResponse<ChangeRoleResponse | null>> {
   const repo = newAuthController();
   return repo.changeRole(data, token);
+}
+export async function refreshTokenAction(
+  data: RefreshTokenRequest,
+  deviceId: string
+): Promise<APIResponse<RefreshTokenResponse | null>> {
+  const repo = newAuthController();
+  return repo.refreshToken(data, deviceId);
 }
 
 export async function signOutAction(

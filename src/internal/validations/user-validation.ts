@@ -1,6 +1,7 @@
 // user-validation.ts
 
 import { z } from "zod";
+import { DepartmentResponse } from "./department-validation";
 
 export const ListUsersRequestSchema = z.object({
   email: z.email().optional(),
@@ -63,4 +64,5 @@ export type ProfileResponse = {
   avatar_url: string;
   address: string;
   department_id?: string;
+  department?: DepartmentResponse;
 };
