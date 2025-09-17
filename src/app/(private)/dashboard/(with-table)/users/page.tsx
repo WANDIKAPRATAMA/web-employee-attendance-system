@@ -4,7 +4,6 @@ import { listUsersAction } from "@/internal/actions/user-action";
 import { auth } from "../../../../../../auth";
 import { Fragment, Suspense } from "react";
 import TableSkeleton from "@/components/views/common/skeletons/table-skeleton";
-import { access } from "fs";
 import PaginationControl from "@/components/views/common/table/pagination-controll";
 export default function Page({
   searchParams,
@@ -63,14 +62,12 @@ async function Suspended({
     page: searchParams.page ? Number(searchParams.page) : 1,
     limit: searchParams.limit ? Number(searchParams.limit) : 10,
   };
-  console.log("🚀 ~ Suspended ~ filters:", filters);
 
   const token = session.accessToken;
 
   const {
     payload: { data, pagination, errors },
     status,
-    message,
   } = await listUsersAction(filters, token);
 
   if (status !== "success" || !data || !pagination) {

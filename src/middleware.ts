@@ -28,11 +28,11 @@ export default auth((req: NextAuthRequest) => {
       pathname,
       "to /dashboard"
     );
-    return NextResponse.redirect(new URL("/dashboard/", req.url));
+    return NextResponse.redirect(new URL("/dashboard/attendance", req.url));
   }
 
   // Redirect unauthenticated users trying to access /dashboard
-  if (!isAuthenticated && pathname.startsWith("/dashboard")) {
+  if (!isAuthenticated && pathname.startsWith("/dashboard/attendance")) {
     console.log(
       "Redirecting unauthenticated user from",
       pathname,
@@ -52,28 +52,13 @@ export default auth((req: NextAuthRequest) => {
         session?.user?.role,
         ") from",
         pathname,
-        "to /dashboard"
+        "to /dashboard/attendance"
       );
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/dashboard/attendance", req.url));
     }
     console.log("Allowing admin role access to", pathname);
   }
 
-  // Example: Restrict specific paths based on roles (uncomment if needed)
-  // if (pathname.match(/^\/dashboard\/novels\/[^/]+\/repository$/)) {
-  //   if (session?.user?.role !== "user" && session?.user?.role !== "creator") {
-  //     console.log(
-  //       "Redirecting non-user/creator role",
-  //       session?.user?.role,
-  //       "from",
-  //       pathname,
-  //       "to /dashboard/todos"
-  //     );
-  //     return NextResponse.redirect(new URL("/dashboard/todos", req.url));
-  //   }
-  // }
-
-  // Allow the request to proceed
   return NextResponse.next();
 });
 

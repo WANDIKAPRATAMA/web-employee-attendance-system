@@ -53,7 +53,6 @@ async function EmployeeDashboard({
     { user_id: profile.source_user_id },
     token
   );
-  console.log("🚀 ~ EmployeeDashboard ~ statusData:", statusData);
 
   const historyData = await getAttendanceHistoryAction(
     { user_id: profile.source_user_id, limit: 4 },

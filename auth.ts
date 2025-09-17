@@ -2,10 +2,12 @@
 
 import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
-import NextAuth, { NextAuthConfig } from "next-auth";
+import NextAuth, { CredentialsSignin, NextAuthConfig } from "next-auth";
 import { signInAction, signOutAction } from "@/internal/actions/auth-action";
 import { cookies } from "next/headers";
-
+class CustomCredentialsSignin extends CredentialsSignin {
+  code = "invalid_credentials";
+}
 const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
@@ -36,7 +38,6 @@ const authConfig: NextAuthConfig = {
               credentials.deviceId as string
             );
             const data = response?.payload.data; // Assuming this is SigninResponse
-            console.log("🚀 ~ authorize ~ data:", data?.user);
 
             if (response.status !== "success" || !data) {
               throw new Error(
@@ -84,8 +85,9 @@ const authConfig: NextAuthConfig = {
             message = (error as any).message;
             errors = (error as any).errors || [];
           }
-
-          throw new Error(JSON.stringify({ message, errors }));
+          throw new CustomCredentialsSignin(
+            JSON.stringify({ message, errors })
+          );
         }
       },
     }),

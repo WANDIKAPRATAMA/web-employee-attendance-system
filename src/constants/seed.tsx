@@ -9,7 +9,7 @@ export const SIDEBAR_DATA = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/dashboard",
+      url: "/dashboard/attendance",
       icon: <LayoutDashboard />,
     },
   ],

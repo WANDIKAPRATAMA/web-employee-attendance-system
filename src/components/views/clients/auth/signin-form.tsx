@@ -60,9 +60,10 @@ export function SignInForm({ className }: { className?: string }) {
           deviceId: deviceId,
           action: "login",
         });
+        console.log("🚀 ~ SignInForm ~ response:", response);
 
         startTransition(() => {
-          if (!response?.ok) {
+          if (!response?.ok || response?.error) {
             toast.error("Whoops", {
               description: "Invalid email or password",
             });

@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export function DepartmentList({
   departments,
@@ -35,9 +36,11 @@ export function DepartmentList({
             Registered departments in the system
           </CardDescription>
         </div>
-        <Button variant="outline" size="sm">
-          <Building className="h-4 w-4 mr-2" />
-          View All
+        <Button variant="outline" size="sm" asChild>
+          <Link href={"/dashboard/departments"}>
+            <Building className="h-4 w-4 mr-2" />
+            View All
+          </Link>
         </Button>
       </CardHeader>
       <CardContent>

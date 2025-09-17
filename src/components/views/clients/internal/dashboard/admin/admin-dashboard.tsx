@@ -14,8 +14,6 @@ import ErrorComponent from "@/components/views/common/place-holder/error-compone
 import { StatCard } from "./stats-card";
 import { EmployeeStatistics } from "./employee-stats";
 import { DepartmentList } from "./department-list";
-import { AttendanceLogsTable } from "./attendance-logs";
-import AttendanceWrapper from "@/components/views/server/dashboard/admin/attendance-wrapper";
 
 type AdminDashboardType = { token: string } & ChildrenProps;
 export async function AdminDashboard({ token, children }: AdminDashboardType) {
