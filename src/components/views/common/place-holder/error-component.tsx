@@ -1,6 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { signIn } from "next-auth/react";
+import { useEffect } from "react";
 export interface CustomError {
   message: string; // General error message
   details?: string; // Optional additional details
@@ -18,6 +20,11 @@ const ErrorComponent = ({
   onRetry,
   redirect,
 }: ErrorComponentProps) => {
+  useEffect(() => {
+    if (redirect) {
+      signIn(); //Forced Sign ini to Resolve Minor on production when User Looggedout
+    }
+  }, [redirect]);
   return (
     <div>
       <div className="min-h-screen w-full rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12">
@@ -68,14 +75,14 @@ const ErrorComponent = ({
             <Button variant="ghost" onClick={() => window.history.back()}>
               Go Back
             </Button>
-            {redirect && (
+            {/* {redirect && (
               <Button
                 variant="ghost"
                 onClick={() => window.location.replace("/auth/signin")}
               >
                 Go Home
               </Button>
-            )}
+            )} */}
           </div>
         </div>
       </div>
