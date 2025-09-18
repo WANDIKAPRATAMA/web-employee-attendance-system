@@ -1,5 +1,11 @@
 ## README.md: Sistem Absensi Karyawan (Letify ID Test)
 
+**Production URL:**
+
+```
+https://web-employee-attendance-system.vercel.app/
+```
+
 ### Deskripsi Proyek
 
 Proyek ini adalah sistem absensi karyawan untuk perusahaan multinasional dengan >50 karyawan dan berbagai departemen. Sistem ini mencatat absensi, mengevaluasi kedisiplinan (ketepatan waktu berdasarkan batas waktu per departemen), dan mengelola data karyawan serta departemen. Dibangun dengan:
