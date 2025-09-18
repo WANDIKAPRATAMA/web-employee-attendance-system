@@ -1,34 +1,52 @@
 import { DepartmentResponse } from "@/internal/validations/department-validation";
-import { parseISO, isBefore, differenceInMinutes, isAfter } from "date-fns";
+import { parseISO, differenceInMinutes, set } from "date-fns";
 import { ThumbsUp, AlertTriangle, TrendingUp } from "lucide-react";
+
+function getMaxTime(recordTime: Date, maxTimeStr: string): Date {
+  let hours = 0,
+    minutes = 0,
+    seconds = 0;
+
+  if (maxTimeStr.includes("T")) {
+    const iso = parseISO(maxTimeStr);
+    hours = iso.getUTCHours();
+    minutes = iso.getUTCMinutes();
+    seconds = iso.getUTCSeconds();
+  } else {
+    const [h, m, s] = maxTimeStr.split(":").map(Number);
+    hours = h;
+    minutes = m;
+    seconds = s;
+  }
+
+  return set(recordTime, { hours, minutes, seconds, milliseconds: 0 });
+}
 
 export function analyzePunctuality(
   record: any,
   department: DepartmentResponse,
   type: "in" | "out"
 ) {
-  if (!record.date_attendance)
+  if (!record.date_attendance) {
     return { status: "unknown", message: "No time recorded" };
+  }
 
   const recordTime = parseISO(record.date_attendance);
+
   const maxTimeStr =
     type === "in"
       ? department.max_clock_in_time
       : department.max_clock_out_time;
 
-  // Extract time part from the ISO string (format: HH:mm:ss)
-  const timePart = maxTimeStr.split("T")[1]?.split("+")[0] || maxTimeStr;
-  const [hours, minutes, seconds] = timePart.split(":").map(Number);
+  console.log("🚀 ~ analyzePunctuality ~ maxTimeStr:", maxTimeStr);
 
-  // Create a date object for comparison (using today's date)
-  const maxTime = new Date();
-  maxTime.setHours(hours, minutes, seconds, 0);
+  const maxTime = getMaxTime(recordTime, maxTimeStr);
+
+  console.log("🚀 ~ analyzePunctuality ~ maxTime:", maxTime);
+  console.log("🚀 ~ analyzePunctuality ~ recordTime:", recordTime);
 
   if (type === "in") {
-    if (
-      isBefore(recordTime, maxTime) ||
-      recordTime.getTime() === maxTime.getTime()
-    ) {
+    if (recordTime <= maxTime) {
       return {
         status: "on-time",
         message: "Arrived on time",
@@ -36,6 +54,7 @@ export function analyzePunctuality(
       };
     } else {
       const minutesLate = differenceInMinutes(recordTime, maxTime);
+      console.log("🚀 ~ analyzePunctuality ~ minutesLate:", minutesLate);
       return {
         status: "late",
         message: `Late by ${minutesLate} minutes`,
@@ -43,10 +62,7 @@ export function analyzePunctuality(
       };
     }
   } else {
-    if (
-      isAfter(recordTime, maxTime) ||
-      recordTime.getTime() === maxTime.getTime()
-    ) {
+    if (recordTime >= maxTime) {
       return {
         status: "on-time",
         message: "Left on time",

@@ -5,8 +5,6 @@ import {
   Building,
   IdCard,
   Calendar,
-  LogIn,
-  LogOut,
   AlertCircle,
   MapPin,
   Phone,
@@ -21,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,13 +31,13 @@ import {
   getAttendanceHistoryAction,
 } from "@/internal/actions/attedance-action";
 import { ProfileResponse } from "@/internal/validations/user-validation";
-import { ModeToggle } from "@/components/ui/toggle-mode";
 import { StatusCard } from "./status-card";
-import { ClockButton } from "./clock-button";
 import { DepartmentResponse } from "@/internal/validations/department-validation";
 import { analyzePunctuality } from "./anylize";
 import { AttendanceHistoryItem } from "./attedance-item";
-import { Progress } from "@radix-ui/react-progress";
+import { Progress } from "@/components/ui/progress";
+import { ClockButton } from "./clock-button";
+import { ProfileCard } from "./profile-card";
 
 async function EmployeeDashboard({
   token,
@@ -117,26 +114,6 @@ async function EmployeeDashboard({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Time Policy</CardTitle>
-            <div className="p-2 rounded-full bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
-              <Clock className="h-4 w-4" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm font-medium">
-              In: {format(parseISO(department.max_clock_in_time), "HH:mm")}
-            </div>
-            <div className="text-sm font-medium mt-1">
-              Out: {format(parseISO(department.max_clock_out_time), "HH:mm")}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Department policy
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Punctuality</CardTitle>
             <div className="p-2 rounded-full bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400">
               <TrendingUp className="h-4 w-4" />
@@ -150,6 +127,34 @@ async function EmployeeDashboard({
               {onTimeCount} on time / {totalRecords} records
             </p>
             <Progress value={onTimePercentage} className="mt-2" />
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-green-900 dark:text-green-100">
+              Quick Actions
+            </CardTitle>
+            <div className="p-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+              <Clock className="h-4 w-4" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                Work Hours
+              </p>
+              <p className="text-xs text-green-700 dark:text-green-300">
+                {department ? (
+                  <>
+                    {format(parseISO(department.max_clock_in_time), "HH:mm")} -{" "}
+                    {format(parseISO(department.max_clock_out_time), "HH:mm")}
+                  </>
+                ) : (
+                  "Not set"
+                )}
+              </p>
+            </div>
+            <ClockButton status={status} token={token} />
           </CardContent>
         </Card>
       </div>
@@ -204,88 +209,7 @@ async function EmployeeDashboard({
         </TabsContent>
 
         <TabsContent value="profile">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Your personal details</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div className="flex items-center">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage
-                      src={profile.avatar_url}
-                      alt={profile.full_name}
-                    />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      {profile.full_name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="ml-4 space-y-1">
-                    <p className="text-lg font-medium leading-none">
-                      {profile.full_name}
-                    </p>
-                    <p className="text-sm text-muted-foreground flex items-center">
-                      <IdCard className="h-3 w-3 mr-1" />
-                      {profile.employee_code}
-                    </p>
-                    <p className="text-sm text-muted-foreground flex items-center">
-                      <Phone className="h-3 w-3 mr-1" />
-                      {profile.phone}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm flex items-center">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Address
-                    </h4>
-                    <p className="text-sm">{profile.address}</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm flex items-center">
-                      <Building className="h-4 w-4 mr-2" />
-                      Department
-                    </h4>
-                    <p className="text-sm">
-                      {profile.department?.name || "Not assigned"}
-                    </p>
-
-                    {profile.department && (
-                      <>
-                        <h4 className="font-medium text-sm mt-3 flex items-center">
-                          <Clock className="h-4 w-4 mr-2" />
-                          Time Policies
-                        </h4>
-                        <div className="flex flex-col gap-2">
-                          Clock In:
-                          <p className="text-sm font-medium leading-none">
-                            {format(
-                              parseISO(profile.department.max_clock_in_time),
-                              "HH:mm",
-                              { locale: id }
-                            )}
-                          </p>
-                          <br />
-                          Clock Out:
-                          <p className="text-sm font-medium leading-none">
-                            {format(
-                              parseISO(profile.department.max_clock_out_time),
-                              "HH:mm",
-                              { locale: id }
-                            )}
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <ProfileCard profile={profile} />
         </TabsContent>
       </Tabs>
     </div>

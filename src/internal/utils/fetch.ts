@@ -14,7 +14,6 @@ async function apiFetch<T>(
   retryDelay = 1000
 ): Promise<APIResponse<T | null>> {
   const url = new URL(`${NEXT_PUBLIC_API_URL}${endpoint}`);
-  console.log("🚀 ~ apiFetch ~ url:", url);
   if (query) {
     Object.entries(query).forEach(([key, value]) => {
       url.searchParams.append(key, value.toString());

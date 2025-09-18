@@ -77,7 +77,8 @@ export function ClockButton({
   }, [isClockedIn, token]);
 
   const clockTime = isClockedIn ? status.clock_in : status.clock_out;
-  const buttonText = isClockedIn ? "Clock Out" : "Clock In";
+  const buttonText = isClockedIn ? "Clock Out Now" : "Clock In Now";
+  const buttonVariant = isClockedIn ? "outline" : "default";
   const buttonIcon = isClockedIn ? (
     <LogOut className="h-4 w-4 mr-2" />
   ) : (
@@ -90,8 +91,9 @@ export function ClockButton({
         <Button
           onClick={handleClockAction}
           disabled={isPending}
-          variant={isClockedIn ? "outline" : "default"}
-          className="w-full transition-all duration-300"
+          variant={buttonVariant}
+          size="lg"
+          className="w-full h-12 transition-all duration-300 hover:scale-105"
         >
           {isPending ? (
             <div className="flex items-center">
@@ -107,30 +109,33 @@ export function ClockButton({
         </Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center">
+        <div className="space-y-3">
+          <h4 className="text-sm font-semibold flex items-center text-foreground">
             {isClockedIn ? (
               <>
-                <LogOut className="h-4 w-4 mr-2" />
-                Clock Out
+                <LogOut className="h-4 w-4 mr-2 text-blue-600" />
+                Ready to Clock Out?
               </>
             ) : (
               <>
-                <LogIn className="h-4 w-4 mr-2" />
-                Clock In
+                <LogIn className="h-4 w-4 mr-2 text-green-600" />
+                Ready to Clock In?
               </>
             )}
           </h4>
-          <p className="text-sm">
+          <p className="text-sm text-muted-foreground">
             {isClockedIn
-              ? "Click to record your clock out time"
-              : "Click to record your clock in time"}
+              ? "Click to record your clock out time and end your work session."
+              : "Click to record your clock in time and start your work session."}
           </p>
           {clockTime && (
-            <p className="text-xs text-muted-foreground flex items-center">
-              <Clock className="h-3 w-3 mr-1" />
-              Last: {format(parseISO(clockTime), "dd MMM yyyy HH:mm")}
-            </p>
+            <div className="flex items-center text-xs text-muted-foreground p-2 bg-muted rounded-lg">
+              <Clock className="h-3 w-3 mr-2" />
+              <span>
+                Last {isClockedIn ? "In" : "Out"}:{" "}
+                {format(parseISO(clockTime), "EEE, MMM dd, HH:mm")}
+              </span>
+            </div>
           )}
         </div>
       </HoverCardContent>

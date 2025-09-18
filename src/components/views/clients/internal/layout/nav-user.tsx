@@ -51,7 +51,10 @@ export function NavUser({
     startTransition(async () => {
       const r = await signOutAction(user.refreshToken);
       if (r.status) {
-        await signOut().then(() => router.push("/auth/signin"));
+        await signOut({
+          callbackUrl: "/auth/signin",
+          redirect: true,
+        });
       }
     });
   }, []);
